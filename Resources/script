@@ -1,0 +1,113 @@
+#!/bin/sh
+# Wifi-Intel-KextsBuilder by chris1111
+# Credit: itlwm, Acidanthera
+# Vars
+version="1.0"
+# Set Icon directory and file 
+export ICNS=$(dirname "${0}")
+iconfile="$ICNS/AppIcon.icns"
+IntelBluetoothFirmware="$HOME/Developer/Wifi-Intel-KextsBuilder/IntelBluetoothFirmware/build/Release"
+itlwm="$HOME/Developer/Wifi-Intel-KextsBuilder/itlwm/build/Release"
+Build="$HOME/Developer"
+KextsBuilder="$HOME/Developer/Wifi-Intel-KextsBuilder"
+apptitle="Wifi-Intel-KextsBuilder"
+
+# Select Restore
+response=$(osascript -e 'tell app "System Events" to display dialog "Select Build to build all kexts.
+
+🚫 : You need Xcode installed to using this program!\n\nCancel for Quit" buttons {"Cancel","Build"} default button 2 with title "'"$apptitle"' '"$version"'" with icon POSIX file "'"$iconfile"'"  ')
+
+action=$(echo $response | cut -d ':' -f2)
+
+# Exit if Canceled
+if [ ! "$action" ] ; then
+  osascript -e 'display notification "Program closing" with title "'"$apptitle"'" subtitle "User cancelled"'
+  Sleep 1
+  echo "QUITAPP"
+fi
+
+osascript <<EOD
+  tell application "Wifi-Intel-KextsBuilder"
+      activate
+  end tell
+EOD
+
+
+ApplicationName="/Applications/Xcode*.app"
+echo $ApplicationName
+
+#Check if Xcode Exist
+if [ ! -d $ApplicationName ]; then
+    echo "$ApplicationName is not installed ❌"
+    Sleep 1
+    osascript -e 'tell app "System Events" to display dialog "
+Xcode is not installed! 
+Install Xcode then retry.
+" buttons {"EXIT"} default button 1 with title "'"$apptitle"' '"$version"'" with icon POSIX file "'"$iconfile"'" giving up after 5 '
+    echo "$ApplicationName is not installed, Exit program in 3 seconds"
+    Sleep 3
+    osascript -e 'display notification "Program closing" sound name "default" with title "'"$apptitle"'" subtitle "Xcode is not installed"'
+    echo "QUITAPP"
+fi
+
+echo "Everything will be done in $Build"
+echo "Xcode is installed OK ✅"
+Sleep 2
+echo "-------------------------------------"
+rm -rf $HOME/Developer/Wifi-Intel-KextsBuilder
+echo "=======================================
+Sleep 3
+Clone Build "
+mkdir -p $HOME/Developer/Wifi-Intel-KextsBuilder
+Sleep 1
+cd $HOME/Developer/Wifi-Intel-KextsBuilder
+git clone https://github.com/OpenIntelWireless/IntelBluetoothFirmware.git
+git clone https://github.com/OpenIntelWireless/itlwm.git
+cd $HOME/Developer/Wifi-Intel-KextsBuilder
+git clone https://github.com/acidanthera/Lilu.git
+cd $HOME/Developer/Wifi-Intel-KextsBuilder/Lilu
+git clone https://github.com/acidanthera/MacKernelSDK
+Sleep 3
+echo "=============================================" 
+echo "Build --> Lilu Debug" 
+echo "============================================="
+xcodebuild -project $HOME/Developer/Wifi-Intel-KextsBuilder/Lilu/Lilu.xcodeproj -configuration Debug ARCHS=x86_64 ONLY_ACTIVE_ARCH=YES CONFIGURATION_BUILD_DIR=$HOME/Developer/Wifi-Intel-KextsBuilder/IntelBluetoothFirmware
+Sleep 1
+cd $HOME/Developer/Wifi-Intel-KextsBuilder/IntelBluetoothFirmware
+git clone https://github.com/acidanthera/MacKernelSDK
+Sleep 3
+echo "=============================================" 
+echo "Build --> IntelBluetoothFirmware" 
+echo "============================================="
+xcodebuild -project IntelBluetoothFirmware.xcodeproj -alltargets -configuration Release
+cd $HOME/Developer/Wifi-Intel-KextsBuilder/itlwm
+git clone https://github.com/acidanthera/MacKernelSDK
+cp -Rp $HOME/Developer/Wifi-Intel-KextsBuilder/IntelBluetoothFirmware/Lilu.kext $HOME/Developer/Wifi-Intel-KextsBuilder/itlwm
+Sleep 3
+echo "=============================================" 
+echo "Build --> itlwm" 
+echo "============================================="
+xcodebuild -project itlwm.xcodeproj -alltargets -configuration Release
+curl -L https://github.com/OpenIntelWireless/HeliPort/releases/download/v1.4.1/HeliPort.dmg -s -o $HOME/Developer/Wifi-Intel-KextsBuilder/itlwm/build/Release/HeliPort.dmg
+Sleep 2
+echo "=============================================" 
+echo "Done --> $KextsBuilder" 
+echo "=============================================" 
+rm -rf $HOME/Developer/Wifi-Intel-KextsBuilder/Lilu
+rm -rf $HOME/Developer/Wifi-Intel-KextsBuilder/itlwm/Lilu*
+rm -rf $HOME/Developer/Wifi-Intel-KextsBuilder/itlwm/MacKernelSDK
+rm -rf $HOME/Developer/Wifi-Intel-KextsBuilder/IntelBluetoothFirmware/Lilu*
+rm -rf $HOME/Developer/Wifi-Intel-KextsBuilder/IntelBluetoothFirmware/MacKernelSDK
+osascript -e 'display notification "Done!" sound name "default" with title "'"$apptitle"'" subtitle "Wifi-Intel-KextsBuilder"'
+Sleep 2
+open $IntelBluetoothFirmware
+Sleep 1
+open $itlwm
+
+osascript <<EOD
+  tell application "Wifi-Intel-KextsBuilder"
+      activate
+  end tell
+EOD
+
+
