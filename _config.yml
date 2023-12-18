@@ -1,5 +1,5 @@
-title: HP-EliteBook-840-G4
-description: HP-EliteBook-840-G4 / OpenCore / macOS
+title: Wifi-Intel-KextsBuilder
+description: Wifi-Intel-KextsBuilder / macOS / Wifi
 github:
-  repository_url: https://github.com/chris1111/HP-EliteBook-840-G4
+  repository_url: https://github.com/chris1111/Wifi-Intel-KextsBuilder
 remote_theme: chris1111/cayman-dark
