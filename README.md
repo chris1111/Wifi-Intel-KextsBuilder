@@ -1,6 +1,6 @@
 Wifi-Intel-KextsBuilder
 
-- Working from Mojave 10.11 to macOS Sonoma 14
+- Working from High Sierra 10.13 to macOS Sonoma 14
 - Disabled Gatekeeper or accept the app in Security
 - 🚫 : You need Xcode installed to using this program
 - ### Credit: [itlwm](https://github.com/OpenIntelWireless/itlwm), [Acidanthera](https://github.com/acidanthera), [chris1111](https://github.com/chris1111)
