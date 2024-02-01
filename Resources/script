@@ -22,8 +22,10 @@ action=$(echo $response | cut -d ':' -f2)
 # Exit if Canceled
 if [ ! "$action" ] ; then
   osascript -e 'display notification "Program closing" with title "'"$apptitle"'" subtitle "User cancelled"'
-  Sleep 1
+  echo "User Cancel"
+  Sleep 2
   echo "QUITAPP"
+  exit 0
 fi
 
 osascript <<EOD
