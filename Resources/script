@@ -59,7 +59,7 @@ echo "-------------------------------------"
 rm -rf $HOME/Developer/Wifi-Intel-KextsBuilder
 echo "=======================================
 Sleep 3
-Clone Build "
+echo "Clone Build "
 mkdir -p $HOME/Developer/Wifi-Intel-KextsBuilder
 Sleep 1
 cd $HOME/Developer/Wifi-Intel-KextsBuilder
