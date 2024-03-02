@@ -22,10 +22,8 @@ action=$(echo $response | cut -d ':' -f2)
 # Exit if Canceled
 if [ ! "$action" ] ; then
   osascript -e 'display notification "Program closing" with title "'"$apptitle"'" subtitle "User cancelled"'
-  echo "User Cancel"
-  Sleep 2
+  Sleep 1
   echo "QUITAPP"
-  exit 0
 fi
 
 osascript <<EOD
@@ -58,7 +56,7 @@ Sleep 2
 echo "-------------------------------------"
 rm -rf $HOME/Developer/Wifi-Intel-KextsBuilder
 echo "=======================================
-Clone Build"
+Clone Build "
 Sleep 3
 mkdir -p $HOME/Developer/Wifi-Intel-KextsBuilder
 Sleep 1
@@ -111,5 +109,3 @@ osascript <<EOD
       activate
   end tell
 EOD
-
-
